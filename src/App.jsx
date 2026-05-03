@@ -204,16 +204,6 @@ export default function App() {
           </a>
         </section>
 
-        {/* Practical Information */}
-        <section className="mt-4 w-full rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="text-base font-semibold text-slate-950">Practical Information</h2>
-          <div className="mt-4 space-y-3 text-sm text-slate-700">
-            <p>📍 Circle Reading Hospital, 100 Drake Way, Reading, Berkshire, RG2 0NE</p>
-            <p>🛡️ Online consultations are available. Current published fees: £375 initial assessment, £210 follow-up.</p>
-            <p>🎥 Educational workshops and CASC teaching enquiries can be routed via the team.</p>
-          </div>
-        </section>
-
         {/* Footer */}
         <footer className="mt-8 flex flex-col items-center gap-3 pb-6 text-center text-xs text-slate-400">
           <div className="flex items-center gap-3">
