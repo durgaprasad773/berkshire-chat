@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChatMessage } from './ChatMessage';
 import { TypingIndicator } from './TypingIndicator';
+import { CTAButtons } from './CTAButtons';
 import {
   WIDGET_ID,
   fetchImprovedChatResponse,
@@ -34,6 +35,13 @@ export function ChatWidget() {
   );
   const [headerName, setHeaderName] = useState('Ask AbrarAI');
   const [profileImageUrl, setProfileImageUrl] = useState(null);
+  const [brandColour, setBrandColour] = useState('#0f172a');
+  const [ctaConfig, setCtaConfig] = useState({
+    bookNowShow: false, bookNowText: '', bookNowUrl: '',
+    sendEmailShow: false, sendEmailText: '',
+    ctaTwoShow: false, ctaTwoText: '', ctaTwoUrl: '',
+    ctaThreeShow: false, ctaThreeText: '', ctaThreeUrl: ''
+  });
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -55,6 +63,20 @@ export function ChatWidget() {
       if (settings?.IntroMessage) setWelcomeMessage(settings.IntroMessage);
       if (settings?.ClinicName) setHeaderName(settings.ClinicName);
       if (settings?.LogoUrl) setProfileImageUrl(settings.LogoUrl);
+      if (settings?.BrandColour) setBrandColour(settings.BrandColour);
+      setCtaConfig({
+        bookNowShow: settings?.BookNowShow === 'True' || settings?.BookNowShow === true,
+        bookNowText: settings?.BookNowLabel || '',
+        bookNowUrl: settings?.BookNowUrl || '',
+        sendEmailShow: settings?.SendAnEmailShow === 'True' || settings?.SendAnEmailShow === true,
+        sendEmailText: settings?.SendAnEmailLabel || '',
+        ctaTwoShow: settings?.CTATwoShow === 'True' || settings?.CTATwoShow === true,
+        ctaTwoText: settings?.CTATwoLabel || '',
+        ctaTwoUrl: settings?.CTATwoUrl || '',
+        ctaThreeShow: settings?.CTAThreeShow === 'True' || settings?.CTAThreeShow === true,
+        ctaThreeText: settings?.CTAThreeLabel || '',
+        ctaThreeUrl: settings?.CTAThreeUrl || ''
+      });
 
       const questions = await getStarterQuestions(WIDGET_ID);
       if (questions?.q1 || questions?.q2 || questions?.q3) {
@@ -178,6 +200,22 @@ export function ChatWidget() {
     }
   };
 
+  const handleBookNow = () => {
+    if (ctaConfig.bookNowUrl) window.open(ctaConfig.bookNowUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleSendEmail = () => {
+    window.location.href = 'mailto:';
+  };
+
+  const handleCTATwo = () => {
+    if (ctaConfig.ctaTwoUrl) window.open(ctaConfig.ctaTwoUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleCTAThree = () => {
+    if (ctaConfig.ctaThreeUrl) window.open(ctaConfig.ctaThreeUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const latestBotId = [...messages].reverse().find(m => m.sender === 'bot' && m.message_id)?.message_id;
 
   return (
@@ -245,6 +283,26 @@ export function ChatWidget() {
 
         <div ref={messagesEndRef} />
       </div>
+
+      {/* CTA Buttons */}
+      <CTAButtons
+        bookNowShow={ctaConfig.bookNowShow}
+        bookNowText={ctaConfig.bookNowText}
+        bookNowUrl={ctaConfig.bookNowUrl}
+        sendEmailShow={ctaConfig.sendEmailShow}
+        sendEmailText={ctaConfig.sendEmailText}
+        ctaTwoShow={ctaConfig.ctaTwoShow}
+        ctaTwoText={ctaConfig.ctaTwoText}
+        ctaTwoUrl={ctaConfig.ctaTwoUrl}
+        ctaThreeShow={ctaConfig.ctaThreeShow}
+        ctaThreeText={ctaConfig.ctaThreeText}
+        ctaThreeUrl={ctaConfig.ctaThreeUrl}
+        onBookNow={handleBookNow}
+        onSendEmail={handleSendEmail}
+        onCTATwo={handleCTATwo}
+        onCTAThree={handleCTAThree}
+        brandColour={brandColour}
+      />
 
       {/* Input area */}
       <div className="border-t border-slate-100 bg-white px-3 py-3">
