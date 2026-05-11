@@ -11,7 +11,7 @@ export const WIDGET_ID = '1ebbc490-8276-43d1-894f-6d5987e17006';
 export async function fetchImprovedChatResponse(message, sessionId, chatbotId = null, apiBaseUrl = '') {
   const requestPayload = {
     message: message,
-    session_id: sessionId,
+    session_id: sessionId ?? '',
     index_name: 'default'
   };
 
@@ -124,17 +124,20 @@ export async function fetchUserIP() {
 export async function insertUserChatSession(userIP, chatbotId) {
   const headers = {
     'Content-Type': 'application/json',
-    accept: 'application/json',
+    accept: 'text/plain',
   };
   if (chatbotId) headers['x-widget-key'] = chatbotId;
 
   const response = await fetch(`${API_URLS.dotnetApi}/UserChatSession_Widget/Insert`, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ UserIP: userIP }),
+    body: JSON.stringify({
+      IPAddress: userIP,
+      SessionStartTime: new Date().toISOString()
+    }),
   });
 
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-  const data = await response.json();
-  return data.SessionId || data.sessionId || data;
+  const sessionId = await response.text();
+  return sessionId.trim();
 }

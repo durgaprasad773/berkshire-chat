@@ -240,7 +240,7 @@ export function ChatWidget() {
       </div>
 
       {/* Messages area */}
-      <div className="bg-slate-50 px-4 py-4 h-[420px] overflow-y-auto">
+      <div className="bg-slate-50 px-4 py-4 h-[420px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
         {/* Welcome message */}
         {messages.length === 0 && (
           <div className="mb-4 max-w-[88%] rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-800 shadow-sm">
@@ -257,6 +257,8 @@ export function ChatWidget() {
               message={msg}
               isLatestBot={isLatestBot}
               onReaction={handleReaction}
+              profileImageUrl={profileImageUrl}
+              headerName={headerName}
             />
           );
         })}

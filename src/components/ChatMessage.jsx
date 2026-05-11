@@ -1,17 +1,21 @@
 import React from 'react';
 import { parseMarkdown } from '../utils/helpers';
 
-export function ChatMessage({ message, isLatestBot, onReaction }) {
+export function ChatMessage({ message, isLatestBot, onReaction, profileImageUrl, headerName }) {
   const isUser = message.sender === 'user';
 
   return (
     <div className={`flex flex-col mb-2.5 ${isUser ? 'items-end' : 'items-start'}`}>
       {!isUser && (
         <div className="flex items-center gap-1.5 mb-1">
-          <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-slate-900">
-            <span className="text-[8px] text-white font-bold">AI</span>
-          </div>
-          <span className="text-[10px] text-slate-400 font-medium">Ask AbrarAI</span>
+          {profileImageUrl ? (
+            <img src={profileImageUrl} alt={headerName} className="h-[18px] w-[18px] rounded-full object-cover" />
+          ) : (
+            <div className="flex h-[18px] w-[18px] items-center justify-center rounded-full bg-slate-900">
+              <span className="text-[8px] text-white font-bold">AI</span>
+            </div>
+          )}
+          <span className="text-[10px] text-slate-400 font-medium">{headerName || 'Ask AbrarAI'}</span>
         </div>
       )}
 
