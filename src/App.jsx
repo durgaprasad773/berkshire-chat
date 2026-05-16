@@ -267,7 +267,7 @@ export default function App() {
         >
           💬
         </span>
-        <span style={{ whiteSpace: 'nowrap' }}>Chat with me</span>
+        <span style={{ whiteSpace: 'nowrap' }}>Ask Dr Abrar</span>
       </button>
     </main>
   );
