@@ -82,6 +82,11 @@ const expertise = [
 ];
 
 export default function App() {
+  const scrollToAssistant = () => {
+    const el = document.getElementById('ask-assistant');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <main className="min-h-screen bg-[#eef4fa] text-slate-900" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
       <section className="mx-auto flex w-full max-w-[440px] flex-col items-center px-4 py-8 sm:py-10">
@@ -104,7 +109,9 @@ export default function App() {
         </header>
 
         {/* Functional Chat Widget */}
-        <ChatWidget />
+        <div id="ask-assistant">
+          <ChatWidget />
+        </div>
 
         {/* Divider */}
         <div className="my-6 flex w-full items-center gap-3">
@@ -215,6 +222,53 @@ export default function App() {
           <p>askabrar.neurascalex.com</p>
         </footer>
       </section>
+
+      {/* Floating Chat Button */}
+      <button
+        type="button"
+        onClick={scrollToAssistant}
+        aria-label="Ask Dr Abrar"
+        style={{
+          position: 'fixed',
+          right: 18,
+          bottom: 18,
+          zIndex: 50,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          background: 'linear-gradient(135deg, #0f2744, #1e40af)',
+          color: '#fff',
+          border: '2px solid rgba(255,255,255,0.9)',
+          borderRadius: 999,
+          padding: '13px 17px',
+          boxShadow: '0 18px 36px rgba(15,39,68,0.24)',
+          fontSize: 14,
+          fontWeight: 700,
+          cursor: 'pointer',
+          transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+          fontFamily: "'DM Sans', system-ui, sans-serif",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = '0 22px 44px rgba(15,39,68,0.28)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 18px 36px rgba(15,39,68,0.24)';
+        }}
+      >
+        <span
+          style={{
+            width: 30, height: 30, borderRadius: 999,
+            display: 'grid', placeItems: 'center',
+            background: '#3b82f6',
+            color: '#fff', fontSize: 15, flexShrink: 0,
+          }}
+        >
+          💬
+        </span>
+        <span style={{ whiteSpace: 'nowrap' }}>Chat with me</span>
+      </button>
     </main>
   );
 }
