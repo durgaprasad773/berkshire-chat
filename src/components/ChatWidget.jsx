@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ChatMessage } from './ChatMessage';
 import { TypingIndicator } from './TypingIndicator';
 import { CTAButtons } from './CTAButtons';
+import { EmailFormModal } from './EmailFormModal';
 import {
   WIDGET_ID,
   fetchImprovedChatResponse,
@@ -42,6 +43,8 @@ export function ChatWidget() {
     ctaTwoShow: false, ctaTwoText: '', ctaTwoUrl: '',
     ctaThreeShow: false, ctaThreeText: '', ctaThreeUrl: ''
   });
+
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -205,7 +208,7 @@ export function ChatWidget() {
   };
 
   const handleSendEmail = () => {
-    window.location.href = 'mailto:';
+    setIsEmailModalOpen(true);
   };
 
   const handleCTATwo = () => {
@@ -219,6 +222,13 @@ export function ChatWidget() {
   const latestBotId = [...messages].reverse().find(m => m.sender === 'bot' && m.message_id)?.message_id;
 
   return (
+    <>
+    <EmailFormModal
+      isOpen={isEmailModalOpen}
+      onClose={() => setIsEmailModalOpen(false)}
+      chatbotId={chatbotId}
+      brandColour={brandColour}
+    />
     <section className="mt-7 w-full overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-xl shadow-slate-300/40">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-3">
@@ -335,5 +345,6 @@ export function ChatWidget() {
         </p>
       </div>
     </section>
+    </>
   );
 }

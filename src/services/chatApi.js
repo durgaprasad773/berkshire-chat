@@ -120,6 +120,36 @@ export async function fetchUserIP() {
   }
 }
 
+// Send email
+export async function sendEmail(name, email, message, chatbotId = null) {
+  const requestPayload = {
+    Name: name,
+    ContactPersonEmail: email,
+    Message: message
+  };
+
+  const headers = {
+    'Content-Type': 'application/json',
+    accept: 'application/json',
+  };
+
+  if (chatbotId) {
+    headers['x-widget-key'] = chatbotId;
+  }
+
+  const response = await fetch(`${API_URLS.dotnetApi}/SendAnEmail_Widget/SendMail`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify(requestPayload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.text();
+}
+
 // Insert user chat session
 export async function insertUserChatSession(userIP, chatbotId) {
   const headers = {
