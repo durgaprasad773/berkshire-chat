@@ -109,7 +109,7 @@ export default function App() {
         </header>
 
         {/* Functional Chat Widget */}
-        <div id="ask-assistant">
+        <div id="ask-assistant" className="w-full">
           <ChatWidget />
         </div>
 
