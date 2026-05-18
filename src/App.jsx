@@ -97,7 +97,7 @@ export default function App() {
             <img src="/logo.png" alt="Dr Abrar Hussain" className="h-16 w-16 rounded-xl object-cover" />
           </div>
           <h1 className="text-3xl font-medium tracking-tight text-slate-950" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
-            Ask Dr Abrar's Assistant
+            Berkshire Psychiatrist
           </h1>
           <p className="mt-2 text-sm font-medium text-slate-700">Dr Abrar Hussain FRCPsych &amp; Team</p>
           <p className="mt-1 text-sm text-slate-500">Consultant Psychiatrist · Liaison Psychiatry · Reading</p>
@@ -224,51 +224,62 @@ export default function App() {
       </section>
 
       {/* Floating Chat Button */}
-      <button
-        type="button"
-        onClick={scrollToAssistant}
-        aria-label="Ask Dr Abrar"
-        style={{
-          position: 'fixed',
-          right: 18,
-          bottom: 18,
-          zIndex: 50,
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          background: 'linear-gradient(135deg, #0f2744, #1e40af)',
-          color: '#fff',
-          border: '2px solid rgba(255,255,255,0.9)',
-          borderRadius: 999,
-          padding: '13px 17px',
-          boxShadow: '0 18px 36px rgba(15,39,68,0.24)',
-          fontSize: 14,
-          fontWeight: 700,
-          cursor: 'pointer',
-          transition: 'transform 0.18s ease, box-shadow 0.18s ease',
-          fontFamily: "'DM Sans', system-ui, sans-serif",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-2px)';
-          e.currentTarget.style.boxShadow = '0 22px 44px rgba(15,39,68,0.28)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 18px 36px rgba(15,39,68,0.24)';
-        }}
-      >
-        <span
-          style={{
-            width: 30, height: 30, borderRadius: 999,
-            display: 'grid', placeItems: 'center',
-            background: '#3b82f6',
-            color: '#fff', fontSize: 15, flexShrink: 0,
-          }}
-        >
-          💬
-        </span>
-        <span style={{ whiteSpace: 'nowrap' }}>Ask Dr Abrar</span>
-      </button>
+<button
+  type="button"
+  onClick={scrollToAssistant}
+  aria-label="Ask Dr Abrar"
+  style={{
+    position: 'fixed',
+    right: 18,
+    bottom: 18,
+    zIndex: 50,
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 10,
+
+    // Berkshire Psychiatrist branding colours
+    background: 'linear-gradient(135deg, #00534f, #0b7c75)',
+    color: '#fff',
+    border: '2px solid rgba(255,255,255,0.9)',
+    borderRadius: 999,
+    padding: '13px 17px',
+    boxShadow: '0 18px 36px rgba(0,83,79,0.28)',
+
+    fontSize: 14,
+    fontWeight: 700,
+    cursor: 'pointer',
+    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+    fontFamily: "'DM Sans', system-ui, sans-serif",
+  }}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.transform = 'translateY(-2px)';
+    e.currentTarget.style.boxShadow = '0 22px 44px rgba(0,83,79,0.34)';
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.transform = 'translateY(0)';
+    e.currentTarget.style.boxShadow = '0 18px 36px rgba(0,83,79,0.28)';
+  }}
+>
+  <span
+    style={{
+      width: 30,
+      height: 30,
+      borderRadius: 999,
+      display: 'grid',
+      placeItems: 'center',
+
+      // softer brand aqua for icon circle
+      background: '#43aaa1',
+      color: '#fff',
+      fontSize: 15,
+      flexShrink: 0,
+    }}
+  >
+    💬
+  </span>
+  <span style={{ whiteSpace: 'nowrap' }}>Ask Dr Abrar</span>
+</button>
+
     </main>
   );
 }
