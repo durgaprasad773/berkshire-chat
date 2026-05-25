@@ -121,11 +121,12 @@ export async function fetchUserIP() {
 }
 
 // Send email
-export async function sendEmail(name, email, message, chatbotId = null) {
+export async function sendEmail(name, email, message, chatbotId = null, bookNowClicksId = null) {
   const requestPayload = {
     Name: name,
     ContactPersonEmail: email,
-    Message: message
+    Message: message,
+    BookNowClicksId: bookNowClicksId || ''
   };
 
   const headers = {
@@ -170,4 +171,36 @@ export async function insertUserChatSession(userIP, chatbotId) {
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
   const sessionId = await response.text();
   return sessionId.trim();
+}
+
+// Track button click
+export async function trackButtonClick(userChatSessionId, buttonLabel, chatbotId = null) {
+  const now = new Date();
+  const day = now.getDate().toString().padStart(2, '0');
+  const month = now.toLocaleString('en', { month: 'short' });
+  const year = now.getFullYear();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  const timestamp = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+
+  const headers = {
+    'Content-Type': 'application/json',
+    accept: 'text/plain',
+  };
+  if (chatbotId) headers['x-widget-key'] = chatbotId;
+
+  const response = await fetch(`${API_URLS.dotnetApi}/BookNowClicks_Widget/Insert`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      UserChatSessionId: userChatSessionId,
+      Click: buttonLabel,
+      Timestamp: timestamp
+    }),
+  });
+
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  const data = await response.text();
+  return data.trim();
 }

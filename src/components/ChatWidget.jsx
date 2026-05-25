@@ -11,6 +11,7 @@ import {
   getStarterQuestions,
   fetchUserIP,
   insertUserChatSession,
+  trackButtonClick,
 } from '../services/chatApi';
 
 const API_BASE_URL = 'https://neurax-python-be-emhfejathhhpe6h3.uksouth-01.azurewebsites.net';
@@ -45,6 +46,7 @@ export function ChatWidget() {
   });
 
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [bookNowClicksId, setBookNowClicksId] = useState(null);
 
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
@@ -203,7 +205,13 @@ export function ChatWidget() {
     }
   };
 
-  const handleBookNow = () => {
+  const handleBookNow = async () => {
+    if (sessionId) {
+      try {
+        const clickId = await trackButtonClick(sessionId, ctaConfig.bookNowText, chatbotId);
+        if (clickId) setBookNowClicksId(clickId);
+      } catch {}
+    }
     if (ctaConfig.bookNowUrl) window.open(ctaConfig.bookNowUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -228,6 +236,7 @@ export function ChatWidget() {
       onClose={() => setIsEmailModalOpen(false)}
       chatbotId={chatbotId}
       brandColour={brandColour}
+      bookNowClicksId={bookNowClicksId}
     />
     <section className="mt-7 w-full overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-xl shadow-slate-300/40">
       {/* Header */}
