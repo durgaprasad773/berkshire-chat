@@ -218,8 +218,17 @@ export default function App() {
             <a href="https://www.drabrarhussain.com/" target="_blank" rel="noopener noreferrer" className="rounded-full bg-white px-3 py-2 text-slate-500 shadow-sm">Profile</a>
             <a href="https://www.cognitionsforcasc.co.uk/" target="_blank" rel="noopener noreferrer" className="rounded-full bg-white px-3 py-2 text-slate-500 shadow-sm">CASC</a>
           </div>
-          <p>© Berkshire Psychiatrist · AI page by <span className="font-semibold text-slate-600">NeuraScaleX</span></p>
-          <p>askabrar.neurascalex.com</p>
+<p>
+  © Berkshire Psychiatrist · Powered by{' '}
+  <a
+    href="https://www.neurascalex.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="font-semibold text-slate-600 hover:text-teal-700 underline underline-offset-2"
+  >
+    NeuraScaleX
+  </a>
+</p>          <p>askabrar.neurascalex.com</p>
         </footer>
       </section>
 
