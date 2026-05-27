@@ -215,7 +215,14 @@ export function ChatWidget() {
     if (ctaConfig.bookNowUrl) window.open(ctaConfig.bookNowUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const handleSendEmail = () => {
+  const handleSendEmail = async () => {
+    const sid = await ensureSession();
+    if (sid && ctaConfig.sendEmailText) {
+      try {
+        const clickId = await trackButtonClick(sid, ctaConfig.sendEmailText, chatbotId);
+        if (clickId) setBookNowClicksId(clickId.trim());
+      } catch {}
+    }
     setIsEmailModalOpen(true);
   };
 
