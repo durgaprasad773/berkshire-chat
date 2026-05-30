@@ -10,6 +10,7 @@ import {
   getClinicSettings,
   getStarterQuestions,
   fetchUserIP,
+  getWidgetRegistration,
   insertUserChatSession,
   trackButtonClick,
 } from '../services/chatApi';
@@ -30,6 +31,7 @@ export function ChatWidget() {
   const [starterQuestions, setStarterQuestions] = useState(DEFAULT_STARTER_QUESTIONS);
   const [chatbotId] = useState(WIDGET_ID);
   const [userIP, setUserIP] = useState('127.0.0.1');
+  const [widgetWebUrlId, setWidgetWebUrlId] = useState(null);
   const [sessionId, setSessionId] = useState(null);
   const [sessionTracked, setSessionTracked] = useState(false);
   const [welcomeMessage, setWelcomeMessage] = useState(
@@ -63,6 +65,13 @@ export function ChatWidget() {
     try {
       const ip = await fetchUserIP();
       setUserIP(ip);
+
+      // Fetch widget registration to get WidgetWebUrlId
+      const webUrl = window.location.href;
+      const registration = await getWidgetRegistration(webUrl);
+      if (registration?.WidgetWebUrlId) {
+        setWidgetWebUrlId(registration.WidgetWebUrlId);
+      }
 
       const settings = await getClinicSettings(WIDGET_ID);
       if (settings?.IntroMessage) setWelcomeMessage(settings.IntroMessage);
@@ -100,7 +109,7 @@ export function ChatWidget() {
   const ensureSession = async () => {
     if (sessionId) return sessionId;
     try {
-      const sid = await insertUserChatSession(userIP, chatbotId);
+      const sid = await insertUserChatSession(userIP, chatbotId, widgetWebUrlId);
       setSessionId(sid);
       setSessionTracked(true);
       return sid;

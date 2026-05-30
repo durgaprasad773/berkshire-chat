@@ -7,6 +7,28 @@ export const API_URLS = {
 // Direct widget ID
 export const WIDGET_ID = '1ebbc490-8276-43d1-894f-6d5987e17006';
 
+// Get widget registration by web URL
+export async function getWidgetRegistration(webUrl) {
+  try {
+    const response = await fetch(`${API_URLS.dotnetApi}/Registration_NoKey/GetWidgetKeyByWebUrl?webUrl=${encodeURIComponent(webUrl)}`, {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data; // Returns { WidgetWebUrlId, WidgetKey }
+  } catch (error) {
+    console.error('Error fetching widget registration:', error);
+    return null;
+  }
+}
+
 // Fetch chat response
 export async function fetchImprovedChatResponse(message, sessionId, chatbotId = null, apiBaseUrl = '') {
   const requestPayload = {
@@ -152,7 +174,7 @@ export async function sendEmail(name, email, message, chatbotId = null, bookNowC
 }
 
 // Insert user chat session
-export async function insertUserChatSession(userIP, chatbotId) {
+export async function insertUserChatSession(userIP, chatbotId, widgetWebUrlId = null) {
   const headers = {
     'Content-Type': 'application/json',
     accept: 'text/plain',
@@ -164,7 +186,8 @@ export async function insertUserChatSession(userIP, chatbotId) {
     headers,
     body: JSON.stringify({
       IPAddress: userIP,
-      SessionStartTime: new Date().toISOString()
+      SessionStartTime: new Date().toISOString(),
+      WidgetWebUrlId: widgetWebUrlId || ''
     }),
   });
 
