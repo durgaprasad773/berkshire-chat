@@ -4,7 +4,7 @@ import { TypingIndicator } from './TypingIndicator';
 import { CTAButtons } from './CTAButtons';
 import { EmailFormModal } from './EmailFormModal';
 import {
-  WIDGET_ID,
+  getWidgetId,
   fetchImprovedChatResponse,
   saveReaction,
   getClinicSettings,
@@ -29,7 +29,7 @@ export function ChatWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const [showStarters, setShowStarters] = useState(true);
   const [starterQuestions, setStarterQuestions] = useState(DEFAULT_STARTER_QUESTIONS);
-  const [chatbotId] = useState(WIDGET_ID);
+  const [chatbotId] = useState(getWidgetId());
   const [userIP, setUserIP] = useState('127.0.0.1');
   const [widgetWebUrlId, setWidgetWebUrlId] = useState(null);
   const [sessionId, setSessionId] = useState(null);
@@ -73,7 +73,7 @@ export function ChatWidget() {
         setWidgetWebUrlId(registration.WidgetWebUrlId);
       }
 
-      const settings = await getClinicSettings(WIDGET_ID);
+      const settings = await getClinicSettings(getWidgetId());
       if (settings?.IntroMessage) setWelcomeMessage(settings.IntroMessage);
       if (settings?.ClinicName) setHeaderName(settings.ClinicName);
       if (settings?.LogoUrl) setProfileImageUrl(settings.LogoUrl);
@@ -92,7 +92,7 @@ export function ChatWidget() {
         ctaThreeUrl: settings?.CTAThreeUrl || ''
       });
 
-      const questions = await getStarterQuestions(WIDGET_ID);
+      const questions = await getStarterQuestions(getWidgetId());
       if (questions?.q1 || questions?.q2 || questions?.q3) {
         const qs = [
           questions.q1 && { q: questions.q1, a: questions.a1, url: questions.Url1, label: questions.ButtonLabel1 },

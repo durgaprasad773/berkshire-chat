@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChatWidget } from './components/ChatWidget';
+import { initializeWidget } from './services/chatApi';
 
 const quickLinks = [
   {
@@ -82,6 +83,13 @@ const expertise = [
 ];
 
 export default function App() {
+  // Initialize widget configuration on mount
+  useEffect(() => {
+    initializeWidget().catch(error => {
+      console.error('Failed to initialize widget:', error);
+    });
+  }, []);
+
   const scrollToAssistant = () => {
     const el = document.getElementById('ask-assistant');
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });

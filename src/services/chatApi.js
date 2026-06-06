@@ -4,8 +4,42 @@ export const API_URLS = {
   dotnetApi: 'https://neurax-net-f2cwbugzh4gqd8hg.uksouth-01.azurewebsites.net'
 };
 
-// Direct widget ID
-export const WIDGET_ID = '1ebbc490-8276-43d1-894f-6d5987e17006';
+// Dynamic widget configuration
+let widgetConfig = {
+  widgetKey: '1ebbc490-8276-43d1-894f-6d5987e17006', // Fallback default
+  widgetWebUrlId: null
+};
+
+// Get current widget configuration
+export function getWidgetConfig() {
+  return widgetConfig;
+}
+
+// Get widget ID (for backward compatibility)
+export function getWidgetId() {
+  return widgetConfig.widgetKey;
+}
+
+// Initialize widget configuration by fetching from API
+export async function initializeWidget() {
+  try {
+    const currentUrl = window.location.href;
+    const data = await getWidgetRegistration(currentUrl);
+    
+    if (data && data.WidgetKey) {
+      widgetConfig.widgetKey = data.WidgetKey;
+      widgetConfig.widgetWebUrlId = data.WidgetWebUrlId;
+      console.log('Widget initialized successfully:', widgetConfig);
+      return widgetConfig;
+    } else {
+      console.warn('Failed to fetch widget registration, using fallback widget ID');
+      return widgetConfig;
+    }
+  } catch (error) {
+    console.error('Error initializing widget:', error);
+    return widgetConfig;
+  }
+}
 
 // Get widget registration by web URL
 export async function getWidgetRegistration(webUrl) {
@@ -42,8 +76,10 @@ export async function fetchImprovedChatResponse(message, sessionId, chatbotId = 
     accept: 'application/json',
   };
 
-  if (chatbotId) {
-    headers['x-widget-key'] = chatbotId;
+  // Use provided chatbotId or fall back to dynamic widget key
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) {
+    headers['x-widget-key'] = widgetKey;
   }
 
   const response = await fetch(`${apiBaseUrl}/nexus/ai/widget/chat`, {
@@ -72,8 +108,10 @@ export async function saveReaction(sessionId, messageId, reaction, chatbotId = n
     accept: 'application/json',
   };
 
-  if (chatbotId) {
-    headers['x-widget-key'] = chatbotId;
+  // Use provided chatbotId or fall back to dynamic widget key
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) {
+    headers['x-widget-key'] = widgetKey;
   }
 
   const response = await fetch(`${apiBaseUrl}/nexus/ai/widget/chat/reaction`, {
@@ -92,7 +130,8 @@ export async function saveReaction(sessionId, messageId, reaction, chatbotId = n
 // Get clinic settings
 export async function getClinicSettings(chatbotId = null) {
   const headers = { accept: 'text/plain' };
-  if (chatbotId) headers['x-widget-key'] = chatbotId;
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) headers['x-widget-key'] = widgetKey;
 
   const response = await fetch(`${API_URLS.dotnetApi}/Settings_Widget/Get`, {
     method: 'GET',
@@ -106,7 +145,8 @@ export async function getClinicSettings(chatbotId = null) {
 // Get starter questions
 export async function getStarterQuestions(chatbotId = null) {
   const headers = { accept: 'text/plain' };
-  if (chatbotId) headers['x-widget-key'] = chatbotId;
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) headers['x-widget-key'] = widgetKey;
 
   const response = await fetch(`${API_URLS.dotnetApi}/StarterQuestions_Widget/Get`, {
     method: 'GET',
@@ -120,7 +160,8 @@ export async function getStarterQuestions(chatbotId = null) {
 // Get doctor details
 export async function getDoctorDetails(chatbotId = null) {
   const headers = { accept: 'text/plain' };
-  if (chatbotId) headers['x-widget-key'] = chatbotId;
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) headers['x-widget-key'] = widgetKey;
 
   const response = await fetch(`${API_URLS.dotnetApi}/DoctorDetails_Widget/Get`, {
     method: 'GET',
@@ -156,8 +197,10 @@ export async function sendEmail(name, email, message, chatbotId = null, bookNowC
     accept: 'application/json',
   };
 
-  if (chatbotId) {
-    headers['x-widget-key'] = chatbotId;
+  // Use provided chatbotId or fall back to dynamic widget key
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) {
+    headers['x-widget-key'] = widgetKey;
   }
 
   const response = await fetch(`${API_URLS.dotnetApi}/SendAnEmail_Widget/SendMail`, {
@@ -179,7 +222,11 @@ export async function insertUserChatSession(userIP, chatbotId, widgetWebUrlId = 
     'Content-Type': 'application/json',
     accept: 'text/plain',
   };
-  if (chatbotId) headers['x-widget-key'] = chatbotId;
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) headers['x-widget-key'] = widgetKey;
+
+  // Use dynamic WidgetWebUrlId if not provided
+  const urlId = widgetWebUrlId || getWidgetConfig().widgetWebUrlId || '';
 
   const response = await fetch(`${API_URLS.dotnetApi}/UserChatSession_Widget/Insert`, {
     method: 'POST',
@@ -187,7 +234,7 @@ export async function insertUserChatSession(userIP, chatbotId, widgetWebUrlId = 
     body: JSON.stringify({
       IPAddress: userIP,
       SessionStartTime: new Date().toISOString(),
-      WidgetWebUrlId: widgetWebUrlId || ''
+      WidgetWebUrlId: urlId
     }),
   });
 
@@ -211,7 +258,8 @@ export async function trackButtonClick(userChatSessionId, buttonLabel, chatbotId
     'Content-Type': 'application/json',
     accept: 'text/plain',
   };
-  if (chatbotId) headers['x-widget-key'] = chatbotId;
+  const widgetKey = chatbotId || getWidgetId();
+  if (widgetKey) headers['x-widget-key'] = widgetKey;
 
   const response = await fetch(`${API_URLS.dotnetApi}/BookNowClicks_Widget/Insert`, {
     method: 'POST',
