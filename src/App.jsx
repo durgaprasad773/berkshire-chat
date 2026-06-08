@@ -101,8 +101,8 @@ export default function App() {
 
         {/* Header */}
         <header className="flex flex-col items-center text-center">
-          <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-lg shadow-slate-300/50">
-            <img src="/logo.png" alt="Dr Abrar Hussain" className="h-16 w-16 rounded-xl object-cover" />
+          <div className="mb-4 flex h-28 w-28 items-center justify-center rounded-full bg-white shadow-lg shadow-slate-300/50">
+            <img src="/logo.png" alt="Dr Abrar Hussain" className="h-24 w-24 rounded-full object-cover" />
           </div>
           <h1 className="text-3xl font-medium tracking-tight text-slate-950" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
             Berkshire Psychiatrist
