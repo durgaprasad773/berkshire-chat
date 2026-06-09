@@ -254,32 +254,31 @@ export function ChatWidget() {
       brandColour={brandColour}
       bookNowClicksId={bookNowClicksId}
     />
-    <section className="mt-7 w-full overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-xl shadow-slate-300/40">
+    <section className="assistant-card">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50 px-4 py-3">
-        <div className="flex items-center gap-3">
+      <div className="assistant-header">
+        <div className="assistant-title">
           {profileImageUrl ? (
-            <img src={profileImageUrl} alt={headerName} className="h-8 w-8 rounded-full object-cover" />
+            <img src={profileImageUrl} alt={headerName} />
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">AI</div>
+            <img src="https://static.wixstatic.com/media/02dd64_bee50af1fb264a0395f683625acfd98b~mv2.jpg/v1/crop/x_283%2Cy_0%2Cw_2002%2Ch_2002/fill/w_342%2Ch_342%2Cal_c%2Cq_80%2Cusm_0.66_1.00_0.01%2Cenc_avif%2Cquality_auto/CircleReading_AbrarHussain_Psyc3_edited.jpg" alt="Dr Abrar's Online Assistant" />
           )}
           <div>
-            <p className="text-sm font-semibold text-slate-900">{headerName}</p>
-            <p className="text-xs text-emerald-600">Online now</p>
+            <strong>{headerName || "Dr Abrar's Online Assistant"}</strong>
+            <span><i className="online-dot"></i> Online now</span>
           </div>
         </div>
-        <div className="text-right text-[11px] leading-tight text-slate-400">
-          <p>Educational only</p>
-          <p>Not medical advice</p>
+        <div className="safety-note">
+          Information only<br/>Not medical advice
         </div>
       </div>
 
-      {/* Messages area */}
-      <div className="bg-slate-50 px-4 py-4 h-[420px] overflow-y-auto" style={{ scrollbarWidth: 'none' }}>
-        {/* Welcome message */}
+      {/* Chat window */}
+      <div className="chat-window">
+        {/* Welcome/first bot message */}
         {messages.length === 0 && (
-          <div className="mb-4 max-w-[88%] rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-800 shadow-sm">
-            {welcomeMessage}
+          <div className="bubble bot">
+            <p>{welcomeMessage}</p>
           </div>
         )}
 
@@ -303,19 +302,21 @@ export function ChatWidget() {
 
         {/* Starter questions */}
         {showStarters && messages.length === 0 && (
-          <div className="flex flex-col items-end space-y-3 mt-2">
-            <p className="text-xs font-medium text-slate-500">Choose a topic to get started:</p>
-            {starterQuestions.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => handleStarterClick(item)}
-                disabled={isLoading}
-                className="ml-auto block w-[86%] rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-sm hover:border-blue-300 hover:text-blue-700 transition-colors text-right disabled:opacity-50"
-              >
-                {item.q}
-              </button>
-            ))}
-          </div>
+          <>
+            <div className="topic-label">Choose a topic to get started</div>
+            <div className="topic-buttons">
+              {starterQuestions.map((item, i) => (
+                <button
+                  key={i}
+                  className="topic-button"
+                  onClick={() => handleStarterClick(item)}
+                  disabled={isLoading}
+                >
+                  {item.q}
+                </button>
+              ))}
+            </div>
+          </>
         )}
 
         <div ref={messagesEndRef} />
@@ -341,33 +342,43 @@ export function ChatWidget() {
         brandColour={brandColour}
       />
 
-      {/* Input area */}
-      <div className="border-t border-slate-100 bg-white px-3 py-3">
-        <div className="flex items-center gap-2">
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Type your question..."
-            value={inputValue}
-            onChange={e => setInputValue(e.target.value)}
-            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            disabled={isLoading}
-            className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-slate-400 disabled:opacity-50"
-          />
-          <button
-            onClick={() => handleSend()}
-            disabled={!inputValue.trim() || isLoading}
-            className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900 text-white disabled:bg-slate-100 disabled:text-slate-400 transition-colors"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M14 8L2 2l2 6-2 6 12-6z" fill="currentColor"/>
-            </svg>
-          </button>
-        </div>
-        <p className="mt-3 text-center text-[10px] text-slate-400">
-          Educational information only · Not a substitute for professional medical advice · Powered by{' '}
-          <span className="font-semibold text-slate-600">NeuraScaleX</span>
-        </p>
+      {/* Input area - functional styled as askabrar */}
+      <div className="input-row">
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Type your question..."
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+          disabled={isLoading}
+          style={{
+            flex: 1,
+            minHeight: '44px',
+            borderRadius: '14px',
+            border: '1px solid #dce8ee',
+            background: 'white',
+            padding: '0 14px',
+            fontSize: '14px',
+            fontFamily: 'inherit',
+            color: '#233044'
+          }}
+        />
+        <button 
+          className="send-fake"
+          onClick={() => handleSend()}
+          disabled={!inputValue.trim() || isLoading}
+          style={{
+            opacity: (!inputValue.trim() || isLoading) ? 0.5 : 1,
+            cursor: (!inputValue.trim() || isLoading) ? 'not-allowed' : 'pointer'
+          }}
+        >
+          ↑
+        </button>
+      </div>
+      
+      <div className="micro-disclaimer">
+        Information only. Not a substitute for professional medical advice, diagnosis, treatment, medication advice, repeat prescriptions, or crisis support.
       </div>
     </section>
     </>

@@ -9,31 +9,20 @@ export function CTAButtons({
   brandColour
 }) {
   const actions = [
-    { show: bookNowShow, label: bookNowText, onClick: onBookNow, url: bookNowUrl },
-    { show: ctaTwoShow, label: ctaTwoText, onClick: onCTATwo, url: ctaTwoUrl },
-    { show: sendEmailShow, label: sendEmailText, onClick: onSendEmail, url: null },
-    { show: ctaThreeShow, label: ctaThreeText, onClick: onCTAThree, url: ctaThreeUrl }
+    { show: bookNowShow, label: bookNowText, onClick: onBookNow, url: bookNowUrl, isPrimary: true },
+    { show: sendEmailShow, label: sendEmailText, onClick: onSendEmail, url: null, isPrimary: false },
+    { show: ctaTwoShow, label: ctaTwoText, onClick: onCTATwo, url: ctaTwoUrl, isPrimary: false },
+    { show: ctaThreeShow, label: ctaThreeText, onClick: onCTAThree, url: ctaThreeUrl, isPrimary: false }
   ].filter(a => a.show && a.label);
 
   if (actions.length === 0) return null;
 
-  const colour = brandColour || '#0f172a';
-
   return (
-    <div
-      className="flex gap-2 overflow-x-auto px-4 py-3 border-t border-slate-100"
-      style={{ scrollbarWidth: 'none' }}
-    >
+    <div className="cta-row">
       {actions.map((action, idx) => (
         <a
           key={idx}
-          className="flex-none text-center border rounded-full px-4 py-2 text-xs font-semibold transition-all cursor-pointer bg-white"
-          style={{
-            minWidth: '120px',
-            borderColor: colour,
-            color: colour,
-            textDecoration: 'none'
-          }}
+          className={idx === 0 ? 'primary-cta' : 'secondary-cta'}
           href={action.url || '#'}
           target={action.url && action.url.startsWith('http') ? '_blank' : undefined}
           rel={action.url && action.url.startsWith('http') ? 'noopener noreferrer' : undefined}
